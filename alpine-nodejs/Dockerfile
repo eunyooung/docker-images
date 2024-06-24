@@ -1,6 +1,6 @@
 ARG VERSION
 
-FROM node:${VERSION}-alpine3.19
+FROM node:${VERSION}-alpine3.19 As base
 
 ARG VERSION
 
@@ -16,3 +16,11 @@ RUN apk --no-cache add tzdata \
   && cp /usr/share/zoneinfo/$TZ /etc/localtime \
   && echo $TZ > /etc/timezone \
   apk del tzdata
+
+FROM base AS builder
+
+WORKDIR /app
+
+COPY package.json ./
+
+CMD ["node", "server.js"]
